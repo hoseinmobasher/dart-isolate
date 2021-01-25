@@ -27,17 +27,17 @@ class IsolateHandler<T> {
   }
 
   static void _entryPoint(dynamic message) {
-    var sendPort;
-    final receiverPort = ReceivePort();
+    var isolateSendPort;
+    final isolateReceiverPort = ReceivePort();
 
-    receiverPort.listen((dynamic data) {
+    isolateReceiverPort.listen((dynamic data) {
       assert(data is String);
-      sendPort.send((data as String).toUpperCase());
+      isolateSendPort.send((data as String).toUpperCase());
     });
 
     if (message is SendPort) {
-      sendPort = message;
-      sendPort.send(receiverPort.sendPort);
+      isolateSendPort = message;
+      isolateSendPort.send(isolateReceiverPort.sendPort);
       return;
     }
   }
